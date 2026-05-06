@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { useLanguage } from '@/lib/language-context'
+import { products } from '@/lib/products'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -28,7 +29,6 @@ export function AIAssistant() {
   const recognitionRef = useRef<SpeechRecognition | null>(null)
   const synthRef = useRef<SpeechSynthesis | null>(null)
 
-  // Initialize speech recognition and synthesis
   useEffect(() => {
     if (typeof window !== 'undefined') {
       synthRef.current = window.speechSynthesis
@@ -56,7 +56,6 @@ export function AIAssistant() {
       }
     }
 
-    // Welcome message
     if (messages.length === 0) {
       setMessages([
         {
@@ -69,14 +68,12 @@ export function AIAssistant() {
     }
   }, [language, t.assistant.welcome, messages.length])
 
-  // Update recognition language when language changes
   useEffect(() => {
     if (recognitionRef.current) {
       recognitionRef.current.lang = language === 'fr' ? 'fr-FR' : 'en-US'
     }
   }, [language])
 
-  // Scroll to bottom when new messages
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
@@ -86,6 +83,7 @@ export function AIAssistant() {
       synthRef.current.cancel()
       const utterance = new SpeechSynthesisUtterance(text)
       utterance.lang = language === 'fr' ? 'fr-FR' : 'en-US'
+      utterance.rate = 0.9
       utterance.onstart = () => setIsSpeaking(true)
       utterance.onend = () => setIsSpeaking(false)
       utterance.onerror = () => setIsSpeaking(false)
@@ -113,54 +111,121 @@ export function AIAssistant() {
 
     // Developer question
     if (
+      lowerMessage.includes('developpeur') ||
       lowerMessage.includes('développeur') ||
       lowerMessage.includes('developer') ||
+      lowerMessage.includes('createur') ||
       lowerMessage.includes('créateur') ||
       lowerMessage.includes('creator') ||
+      lowerMessage.includes('qui t\'a cree') ||
       lowerMessage.includes('qui t\'a créé') ||
       lowerMessage.includes('who created') ||
-      lowerMessage.includes('who made')
+      lowerMessage.includes('who made') ||
+      lowerMessage.includes('ton nom') ||
+      lowerMessage.includes('your name')
     ) {
       return language === 'fr'
-        ? `Mon développeur est ${DEVELOPER_NAME}. Il a créé VARNOX STORE pour vous offrir les meilleurs scripts et bots d'automatisation.`
-        : `My developer is ${DEVELOPER_NAME}. He created VARNOX STORE to offer you the best automation scripts and bots.`
+        ? `Mon developpeur est ${DEVELOPER_NAME}. Il a cree VARNOX STORE pour vous offrir les meilleurs scripts et bots d'automatisation du marche.`
+        : `My developer is ${DEVELOPER_NAME}. He created VARNOX STORE to offer you the best automation scripts and bots on the market.`
     }
 
-    // Products
+    // WhatsApp specific products
+    if (lowerMessage.includes('whatsapp')) {
+      if (lowerMessage.includes('ban') || lowerMessage.includes('unban') || lowerMessage.includes('debannir')) {
+        return language === 'fr'
+          ? 'Notre methode Ban & Unban WhatsApp ($79.99) vous permet de debannir votre compte et inclut des techniques de protection contre les futurs bannissements. Garantie de resultat !'
+          : 'Our WhatsApp Ban & Unban Method ($79.99) allows you to unban your account and includes protection techniques against future bans. Result guaranteed!'
+      }
+      if (lowerMessage.includes('certif') || lowerMessage.includes('business') || lowerMessage.includes('badge')) {
+        return language === 'fr'
+          ? 'La Certification WhatsApp Business ($149.99) vous donne le badge verifie officiel, un compte business professionnel, et un catalogue produits illimite. Augmentez votre credibilite !'
+          : 'WhatsApp Business Certification ($149.99) gives you the official verified badge, a professional business account, and unlimited product catalog. Boost your credibility!'
+      }
+      if (lowerMessage.includes('mass') || lowerMessage.includes('bulk') || lowerMessage.includes('envoi')) {
+        return language === 'fr'
+          ? 'Le Mass Sender Pro ($69.99) permet d\'envoyer des messages en masse avec des delais intelligents pour eviter les bans. Import CSV/Excel et rapport de livraison inclus.'
+          : 'Mass Sender Pro ($69.99) allows you to send bulk messages with smart delays to avoid bans. CSV/Excel import and delivery report included.'
+      }
+      if (lowerMessage.includes('extract') || lowerMessage.includes('groupe') || lowerMessage.includes('group')) {
+        return language === 'fr'
+          ? 'Le Group Extractor ($39.99) extrait tous les membres de vos groupes WhatsApp avec export CSV/Excel. Parfait pour vos campagnes marketing !'
+          : 'The Group Extractor ($39.99) extracts all members from your WhatsApp groups with CSV/Excel export. Perfect for your marketing campaigns!'
+      }
+      return language === 'fr'
+        ? 'Nous avons plusieurs produits WhatsApp : Bot Multi-Device ($49.99), Certification Business ($149.99), Ban & Unban Method ($79.99), CRM Bot ($89.99), Mass Sender Pro ($69.99), Group Extractor ($39.99). Lequel vous interesse ?'
+        : 'We have several WhatsApp products: Multi-Device Bot ($49.99), Business Certification ($149.99), Ban & Unban Method ($79.99), CRM Bot ($89.99), Mass Sender Pro ($69.99), Group Extractor ($39.99). Which one interests you?'
+    }
+
+    // Telegram products
+    if (lowerMessage.includes('telegram')) {
+      return language === 'fr'
+        ? 'Nos produits Telegram incluent : Bot Automation ($39.99) pour la moderation automatique et gestion de canaux, et Shop Bot ($69.99) pour creer une boutique complete sur Telegram avec paiement integre.'
+        : 'Our Telegram products include: Automation Bot ($39.99) for auto-moderation and channel management, and Shop Bot ($69.99) to create a complete store on Telegram with integrated payment.'
+    }
+
+    // Virtual numbers
+    if (lowerMessage.includes('numero') || lowerMessage.includes('number') || lowerMessage.includes('virtuel') || lowerMessage.includes('virtual')) {
+      return language === 'fr'
+        ? 'Nos packs de numeros virtuels : Pack Standard ($29.99) avec 10 numeros multi-pays, Pack Premium ($59.99) avec 25 numeros a duree illimitee et SMS illimites. Parfait pour les verifications WhatsApp et Telegram !'
+        : 'Our virtual number packs: Standard Pack ($29.99) with 10 multi-country numbers, Premium Pack ($59.99) with 25 unlimited duration numbers and unlimited SMS. Perfect for WhatsApp and Telegram verifications!'
+    }
+
+    // Bug bot / Security
+    if (lowerMessage.includes('bug') || lowerMessage.includes('securite') || lowerMessage.includes('security') || lowerMessage.includes('crash')) {
+      return language === 'fr'
+        ? 'Nos outils de securite : Bug Bot Detector ($44.99) pour scanner les vulnerabilites de vos bots, Crash Bot Protection ($34.99) pour une protection anti-crash avec recuperation automatique et monitoring 24/7.'
+        : 'Our security tools: Bug Bot Detector ($44.99) to scan vulnerabilities in your bots, Crash Bot Protection ($34.99) for anti-crash protection with automatic recovery and 24/7 monitoring.'
+    }
+
+    // AI products
+    if (lowerMessage.includes('ia') || lowerMessage.includes('ai') || lowerMessage.includes('intelligence')) {
+      return language === 'fr'
+        ? 'Nos produits IA : AI Chatbot Script ($79.99) avec IA conversationnelle et apprentissage continu, AI Content Generator ($59.99) pour generer du contenu pour vos reseaux sociaux et marketing.'
+        : 'Our AI products: AI Chatbot Script ($79.99) with conversational AI and continuous learning, AI Content Generator ($59.99) to generate content for your social media and marketing.'
+    }
+
+    // All products
     if (
       lowerMessage.includes('produit') ||
       lowerMessage.includes('product') ||
       lowerMessage.includes('bot') ||
-      lowerMessage.includes('script')
+      lowerMessage.includes('script') ||
+      lowerMessage.includes('catalogue') ||
+      lowerMessage.includes('catalog')
     ) {
+      const productCount = products.length
       return language === 'fr'
-        ? 'Nous proposons plusieurs produits : des bots WhatsApp, des bots Telegram, des outils d\'automatisation et des scripts IA. Visitez notre page Produits pour en savoir plus !'
-        : 'We offer several products: WhatsApp bots, Telegram bots, automation tools, and AI scripts. Visit our Products page to learn more!'
+        ? `VARNOX STORE propose ${productCount} produits dans 6 categories : WhatsApp (6 produits), Telegram (2), Numeros Virtuels (2), Securite (2), IA (2), et Automatisation (2). Visitez notre page Produits pour voir tout !`
+        : `VARNOX STORE offers ${productCount} products in 6 categories: WhatsApp (6 products), Telegram (2), Virtual Numbers (2), Security (2), AI (2), and Automation (2). Visit our Products page to see everything!`
     }
 
     // Prices
     if (
       lowerMessage.includes('prix') ||
       lowerMessage.includes('price') ||
+      lowerMessage.includes('cout') ||
       lowerMessage.includes('coût') ||
       lowerMessage.includes('cost') ||
-      lowerMessage.includes('tarif')
+      lowerMessage.includes('tarif') ||
+      lowerMessage.includes('combien')
     ) {
       return language === 'fr'
-        ? 'Nos prix varient de $39.99 à $89.99 selon le produit. Chaque script inclut un support 24/7 et des mises à jour gratuites.'
-        : 'Our prices range from $39.99 to $89.99 depending on the product. Each script includes 24/7 support and free updates.'
+        ? 'Nos prix varient de $29.99 (Pack Numeros Virtuels) a $149.99 (Certification WhatsApp Business). Tous les scripts incluent un support 24/7 et des mises a jour gratuites a vie !'
+        : 'Our prices range from $29.99 (Virtual Numbers Pack) to $149.99 (WhatsApp Business Certification). All scripts include 24/7 support and free lifetime updates!'
     }
 
-    // Help
-    if (
-      lowerMessage.includes('aide') ||
-      lowerMessage.includes('help') ||
-      lowerMessage.includes('comment') ||
-      lowerMessage.includes('how')
-    ) {
+    // Payment
+    if (lowerMessage.includes('paiement') || lowerMessage.includes('payment') || lowerMessage.includes('payer') || lowerMessage.includes('pay')) {
       return language === 'fr'
-        ? 'Je peux vous aider avec : informations sur les produits, prix, processus d\'achat, et support technique. Que souhaitez-vous savoir ?'
-        : 'I can help you with: product information, pricing, purchase process, and technical support. What would you like to know?'
+        ? 'Nous acceptons plusieurs methodes de paiement. Apres l\'achat, vous recevez un acces instantane au script avec documentation et support. Contactez-nous sur WhatsApp ou Telegram pour finaliser votre commande !'
+        : 'We accept multiple payment methods. After purchase, you receive instant access to the script with documentation and support. Contact us on WhatsApp or Telegram to finalize your order!'
+    }
+
+    // Support
+    if (lowerMessage.includes('support') || lowerMessage.includes('aide') || lowerMessage.includes('help') || lowerMessage.includes('contact')) {
+      return language === 'fr'
+        ? 'Notre support est disponible 24/7 ! Contactez-nous sur WhatsApp (+224669288332) ou Telegram (@Varnox_Or_novark). Nous repondons rapidement a toutes vos questions.'
+        : 'Our support is available 24/7! Contact us on WhatsApp (+224669288332) or Telegram (@Varnox_Or_novark). We respond quickly to all your questions.'
     }
 
     // Greetings
@@ -168,27 +233,32 @@ export function AIAssistant() {
       lowerMessage.includes('bonjour') ||
       lowerMessage.includes('hello') ||
       lowerMessage.includes('salut') ||
-      lowerMessage.includes('hi')
+      lowerMessage.includes('hi') ||
+      lowerMessage.includes('hey')
     ) {
       return language === 'fr'
-        ? 'Bonjour ! Comment puis-je vous aider aujourd\'hui ?'
-        : 'Hello! How can I help you today?'
+        ? 'Bonjour et bienvenue sur VARNOX STORE ! Je suis votre assistant IA. Comment puis-je vous aider aujourd\'hui ? Vous pouvez me demander des infos sur nos produits, prix, ou support.'
+        : 'Hello and welcome to VARNOX STORE! I\'m your AI assistant. How can I help you today? You can ask me about our products, prices, or support.'
     }
 
     // Thank you
-    if (
-      lowerMessage.includes('merci') ||
-      lowerMessage.includes('thank')
-    ) {
+    if (lowerMessage.includes('merci') || lowerMessage.includes('thank')) {
       return language === 'fr'
-        ? 'Je vous en prie ! N\'hésitez pas si vous avez d\'autres questions.'
-        : 'You\'re welcome! Feel free to ask if you have any other questions.'
+        ? 'Je vous en prie ! N\'hesitez pas si vous avez d\'autres questions. Bonne journee et a bientot sur VARNOX STORE !'
+        : 'You\'re welcome! Feel free to ask if you have any other questions. Have a great day and see you soon on VARNOX STORE!'
+    }
+
+    // Bye
+    if (lowerMessage.includes('bye') || lowerMessage.includes('au revoir') || lowerMessage.includes('ciao')) {
+      return language === 'fr'
+        ? 'Au revoir ! Merci de votre visite sur VARNOX STORE. N\'hesitez pas a revenir si vous avez des questions !'
+        : 'Goodbye! Thank you for visiting VARNOX STORE. Feel free to come back if you have any questions!'
     }
 
     // Default
     return language === 'fr'
-      ? 'Je suis l\'assistant IA de VARNOX STORE. Je peux vous renseigner sur nos produits, les prix, et répondre à vos questions. Que puis-je faire pour vous ?'
-      : 'I\'m the VARNOX STORE AI assistant. I can inform you about our products, pricing, and answer your questions. What can I do for you?'
+      ? 'Je suis l\'assistant IA de VARNOX STORE, cree par ' + DEVELOPER_NAME + '. Je peux vous renseigner sur nos produits (WhatsApp, Telegram, IA, Securite, Numeros Virtuels), les prix, et le support. Que puis-je faire pour vous ?'
+      : 'I\'m the VARNOX STORE AI assistant, created by ' + DEVELOPER_NAME + '. I can inform you about our products (WhatsApp, Telegram, AI, Security, Virtual Numbers), pricing, and support. What can I do for you?'
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -206,8 +276,7 @@ export function AIAssistant() {
     setInput('')
     setIsLoading(true)
 
-    // Simulate API delay
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await new Promise((resolve) => setTimeout(resolve, 800))
 
     const responseText = generateResponse(userMessage.content)
     const assistantMessage: Message = {
@@ -220,7 +289,6 @@ export function AIAssistant() {
     setMessages((prev) => [...prev, assistantMessage])
     setIsLoading(false)
 
-    // Speak the response
     if (voiceEnabled) {
       speak(responseText)
     }
@@ -231,12 +299,16 @@ export function AIAssistant() {
       {/* Header */}
       <div className="p-4 border-b border-border/50 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
-            <Bot className="w-5 h-5 text-primary" />
+          <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center relative">
+            <Bot className="w-5 h-5 text-accent" />
+            <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-card" />
           </div>
           <div>
             <h3 className="font-semibold text-foreground">{t.assistant.title}</h3>
-            <p className="text-xs text-muted-foreground">{t.assistant.subtitle}</p>
+            <p className="text-xs text-muted-foreground flex items-center gap-1">
+              <span className="w-1.5 h-1.5 bg-green-500 rounded-full" />
+              {language === 'fr' ? 'En ligne' : 'Online'}
+            </p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -244,12 +316,13 @@ export function AIAssistant() {
             variant="ghost"
             size="icon"
             onClick={() => setVoiceEnabled(!voiceEnabled)}
-            className={voiceEnabled ? 'text-primary' : 'text-muted-foreground'}
+            className={voiceEnabled ? 'text-accent' : 'text-muted-foreground'}
+            title={voiceEnabled ? 'Disable voice' : 'Enable voice'}
           >
             {voiceEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
           </Button>
           {isSpeaking && (
-            <Button variant="ghost" size="icon" onClick={stopSpeaking} className="text-accent">
+            <Button variant="ghost" size="icon" onClick={stopSpeaking} className="text-primary animate-pulse">
               <VolumeX className="w-4 h-4" />
             </Button>
           )}
@@ -281,7 +354,7 @@ export function AIAssistant() {
                   : 'bg-secondary text-secondary-foreground rounded-tl-sm'
               }`}
             >
-              <p className="text-sm">{message.content}</p>
+              <p className="text-sm whitespace-pre-wrap">{message.content}</p>
               <p className="text-[10px] opacity-60 mt-1">
                 {message.timestamp.toLocaleTimeString(language === 'fr' ? 'fr-FR' : 'en-US', {
                   hour: '2-digit',
@@ -299,14 +372,8 @@ export function AIAssistant() {
             <div className="bg-secondary rounded-2xl rounded-tl-sm px-4 py-3">
               <div className="flex gap-1">
                 <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" />
-                <span
-                  className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"
-                  style={{ animationDelay: '0.1s' }}
-                />
-                <span
-                  className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce"
-                  style={{ animationDelay: '0.2s' }}
-                />
+                <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
+                <span className="w-2 h-2 bg-muted-foreground rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
               </div>
             </div>
           </div>
@@ -322,7 +389,7 @@ export function AIAssistant() {
             variant="outline"
             size="icon"
             onClick={toggleListening}
-            className={`border-border ${isListening ? 'bg-primary text-primary-foreground animate-pulse' : ''}`}
+            className={`border-border ${isListening ? 'bg-primary text-primary-foreground animate-pulse' : 'hover:border-primary'}`}
           >
             {isListening ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
           </Button>
@@ -349,7 +416,6 @@ export function AIAssistant() {
   )
 }
 
-// Add type declarations for Web Speech API
 declare global {
   interface Window {
     SpeechRecognition: typeof SpeechRecognition

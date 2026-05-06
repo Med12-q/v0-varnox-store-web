@@ -6,14 +6,16 @@ import { products, type Product } from '@/lib/products'
 import { ProductCard } from '@/components/product-card'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Search, MessageSquare, Bot, Zap, Sparkles } from 'lucide-react'
+import { Search, MessageSquare, Bot, Zap, Brain, Shield, Wrench, LayoutGrid } from 'lucide-react'
 
 const categories = [
-  { id: 'all', icon: null },
+  { id: 'all', icon: LayoutGrid },
   { id: 'whatsapp', icon: MessageSquare },
   { id: 'telegram', icon: Bot },
+  { id: 'ai', icon: Brain },
   { id: 'automation', icon: Zap },
-  { id: 'ai', icon: Sparkles },
+  { id: 'security', icon: Shield },
+  { id: 'tools', icon: Wrench },
 ] as const
 
 export default function ProductsPage() {

@@ -36,10 +36,12 @@ export const translations = {
     // Categories
     categories: {
       all: 'Tous',
-      whatsapp: 'WhatsApp Bots',
-      telegram: 'Telegram Bots',
+      whatsapp: 'WhatsApp',
+      telegram: 'Telegram',
       automation: 'Automatisation',
       ai: 'Intelligence Artificielle',
+      security: 'Securite',
+      tools: 'Outils',
     },
     // AI Assistant
     assistant: {
@@ -138,10 +140,12 @@ export const translations = {
     // Categories
     categories: {
       all: 'All',
-      whatsapp: 'WhatsApp Bots',
-      telegram: 'Telegram Bots',
+      whatsapp: 'WhatsApp',
+      telegram: 'Telegram',
       automation: 'Automation',
       ai: 'Artificial Intelligence',
+      security: 'Security',
+      tools: 'Tools',
     },
     // AI Assistant
     assistant: {
