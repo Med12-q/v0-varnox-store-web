@@ -8,6 +8,9 @@ import { AdminProvider } from '@/lib/admin-context'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { FloatingContacts } from '@/components/floating-contacts'
+import { LiveNotifications } from '@/components/live-notifications'
+import { LiveStats } from '@/components/live-stats'
+import { PromoBanner } from '@/components/promo-banner'
 import './globals.css'
 
 const inter = Inter({ 
@@ -70,10 +73,13 @@ export default function RootLayout({
           <LanguageProvider>
             <OrdersProvider>
               <AdminProvider>
+                <PromoBanner />
                 <Header />
-                <main className="flex-1">{children}</main>
+                <main className="flex-1 pt-10">{children}</main>
                 <Footer />
                 <FloatingContacts />
+                <LiveNotifications />
+                <LiveStats />
               </AdminProvider>
             </OrdersProvider>
           </LanguageProvider>
