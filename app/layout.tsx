@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter, Geist_Mono } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/next'
 import { LanguageProvider } from '@/lib/language-context'
 import { AuthProvider } from '@/lib/auth-context'
 import { OrdersProvider } from '@/lib/orders-context'
@@ -11,6 +10,7 @@ import { FloatingContacts } from '@/components/floating-contacts'
 import { LiveNotifications } from '@/components/live-notifications'
 import { LiveStats } from '@/components/live-stats'
 import { PromoBanner } from '@/components/promo-banner'
+import { QuickChat } from '@/components/quick-chat'
 import './globals.css'
 
 const inter = Inter({ 
@@ -80,12 +80,12 @@ export default function RootLayout({
                 <FloatingContacts />
                 <LiveNotifications />
                 <LiveStats />
+                <QuickChat />
               </AdminProvider>
             </OrdersProvider>
           </LanguageProvider>
         </AuthProvider>
-        {process.env.NODE_ENV === 'production' && <Analytics />}
-      </body>
+        </body>
     </html>
   )
 }

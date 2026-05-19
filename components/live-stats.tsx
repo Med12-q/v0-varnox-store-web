@@ -6,12 +6,17 @@ import { useLanguage } from '@/lib/language-context'
 
 export function LiveStats() {
   const { language } = useLanguage()
+  const [mounted, setMounted] = useState(false)
   const [stats, setStats] = useState({
     visitors: 1247,
     sales: 89,
     revenue: 4520,
     activeUsers: 42,
   })
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -25,6 +30,13 @@ export function LiveStats() {
 
     return () => clearInterval(interval)
   }, [])
+
+  // Format number without locale-specific formatting to avoid hydration mismatch
+  const formatNumber = (num: number) => {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+  }
+
+  if (!mounted) return null
 
   return (
     <div className="fixed top-20 right-4 z-30 hidden xl:block">
@@ -54,7 +66,7 @@ export function LiveStats() {
                 {language === 'fr' ? 'Visiteurs' : 'Visitors'}
               </span>
             </div>
-            <span className="text-sm font-bold text-foreground">{stats.visitors.toLocaleString()}</span>
+            <span className="text-sm font-bold text-foreground">{formatNumber(stats.visitors)}</span>
           </div>
 
           <div className="flex items-center justify-between">
