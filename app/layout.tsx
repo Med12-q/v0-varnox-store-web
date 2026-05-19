@@ -9,8 +9,8 @@ import { Footer } from '@/components/footer'
 import { FloatingContacts } from '@/components/floating-contacts'
 import { LiveNotifications } from '@/components/live-notifications'
 import { LiveStats } from '@/components/live-stats'
+import { OnlineVisitors } from '@/components/online-visitors'
 import { PromoBanner } from '@/components/promo-banner'
-import { QuickChat } from '@/components/quick-chat'
 import './globals.css'
 
 const inter = Inter({ 
@@ -80,7 +80,7 @@ export default function RootLayout({
                 <FloatingContacts />
                 <LiveNotifications />
                 <LiveStats />
-                <QuickChat />
+                <OnlineVisitors />
               </AdminProvider>
             </OrdersProvider>
           </LanguageProvider>
