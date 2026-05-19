@@ -11,11 +11,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { Menu, X, User, LogOut, LayoutDashboard, Globe, Bot } from 'lucide-react'
+import { Menu, X, User, LogOut, LayoutDashboard, Globe, Bot, Shield } from 'lucide-react'
+import { useAdmin } from '@/lib/admin-context'
 
 export function Header() {
   const { language, setLanguage, t } = useLanguage()
   const { user, logout } = useAuth()
+  const { isAuthenticated: isAdmin } = useAdmin()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
@@ -61,6 +63,15 @@ export function Header() {
                 className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
               >
                 {t.nav.dashboard}
+              </Link>
+            )}
+            {isAdmin && (
+              <Link
+                href="/admin/dashboard"
+                className="text-sm font-medium text-primary hover:text-primary/80 transition-colors flex items-center gap-1"
+              >
+                <Shield className="w-4 h-4" />
+                Admin
               </Link>
             )}
           </nav>

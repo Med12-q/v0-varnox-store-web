@@ -3,6 +3,8 @@ import { Inter, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { LanguageProvider } from '@/lib/language-context'
 import { AuthProvider } from '@/lib/auth-context'
+import { OrdersProvider } from '@/lib/orders-context'
+import { AdminProvider } from '@/lib/admin-context'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { FloatingContacts } from '@/components/floating-contacts'
@@ -66,10 +68,14 @@ export default function RootLayout({
       <body className="font-sans antialiased min-h-screen flex flex-col">
         <AuthProvider>
           <LanguageProvider>
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
-            <FloatingContacts />
+            <OrdersProvider>
+              <AdminProvider>
+                <Header />
+                <main className="flex-1">{children}</main>
+                <Footer />
+                <FloatingContacts />
+              </AdminProvider>
+            </OrdersProvider>
           </LanguageProvider>
         </AuthProvider>
         {process.env.NODE_ENV === 'production' && <Analytics />}
