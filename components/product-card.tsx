@@ -8,6 +8,7 @@ import type { Product } from '@/lib/products'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
 import { OrderModal } from '@/components/order-modal'
+import { StockAlert } from '@/components/stock-alert'
 import { Check, ShoppingBag, Sparkles, MessageSquare, Bot, Zap, Shield, Wrench, Brain } from 'lucide-react'
 
 const categoryIcons = {
@@ -92,10 +93,12 @@ export function ProductCard({ product }: ProductCardProps) {
             ))}
           </ul>
 
-          <div className="flex items-baseline gap-1">
+          <div className="flex items-baseline gap-1 mb-3">
             <span className="text-2xl font-bold text-primary">${product.price}</span>
             <span className="text-sm text-muted-foreground">USD</span>
           </div>
+
+          <StockAlert productId={product.id} />
         </CardContent>
 
         <CardFooter className="p-5 pt-0 flex gap-2">

@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter, Geist_Mono } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/next'
 import { LanguageProvider } from '@/lib/language-context'
 import { AuthProvider } from '@/lib/auth-context'
 import { OrdersProvider } from '@/lib/orders-context'
@@ -8,6 +7,10 @@ import { AdminProvider } from '@/lib/admin-context'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
 import { FloatingContacts } from '@/components/floating-contacts'
+import { LiveNotifications } from '@/components/live-notifications'
+import { LiveStats } from '@/components/live-stats'
+import { OnlineVisitors } from '@/components/online-visitors'
+import { PromoBanner } from '@/components/promo-banner'
 import './globals.css'
 
 const inter = Inter({ 
@@ -70,16 +73,19 @@ export default function RootLayout({
           <LanguageProvider>
             <OrdersProvider>
               <AdminProvider>
+                <PromoBanner />
                 <Header />
-                <main className="flex-1">{children}</main>
+                <main className="flex-1 pt-10">{children}</main>
                 <Footer />
                 <FloatingContacts />
+                <LiveNotifications />
+                <LiveStats />
+                <OnlineVisitors />
               </AdminProvider>
             </OrdersProvider>
           </LanguageProvider>
         </AuthProvider>
-        {process.env.NODE_ENV === 'production' && <Analytics />}
-      </body>
+        </body>
     </html>
   )
 }

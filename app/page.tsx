@@ -5,6 +5,7 @@ import { useLanguage } from '@/lib/language-context'
 import { getPopularProducts, products } from '@/lib/products'
 import { HeroSection } from '@/components/hero-section'
 import { ProductCard } from '@/components/product-card'
+import { TestimonialsCarousel } from '@/components/testimonials-carousel'
 import { Button } from '@/components/ui/button'
 import { ArrowRight, Bot, Shield, Zap, Clock, Headphones, RefreshCw, CheckCircle2, Users, Package, Star } from 'lucide-react'
 
@@ -150,72 +151,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Testimonials/Trust Section */}
-      <section className="py-20 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-accent/5" />
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="text-center mb-12">
-            <span className="inline-block px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-4">
-              {language === 'fr' ? 'Confiance' : 'Trust'}
-            </span>
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              {language === 'fr' ? 'Ce que disent nos clients' : 'What our customers say'}
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              {
-                name: 'Ahmed K.',
-                role: { fr: 'Entrepreneur', en: 'Entrepreneur' },
-                text: {
-                  fr: 'Les bots WhatsApp de VARNOX sont excellents. Mon business a double en 2 mois !',
-                  en: 'VARNOX WhatsApp bots are excellent. My business doubled in 2 months!',
-                },
-              },
-              {
-                name: 'Sarah M.',
-                role: { fr: 'Marketing Digital', en: 'Digital Marketing' },
-                text: {
-                  fr: 'Support incroyable et scripts tres professionnels. Je recommande a 100%.',
-                  en: 'Incredible support and very professional scripts. I recommend 100%.',
-                },
-              },
-              {
-                name: 'Omar D.',
-                role: { fr: 'Developpeur', en: 'Developer' },
-                text: {
-                  fr: 'La certification WhatsApp Business etait exactement ce dont j\'avais besoin.',
-                  en: 'The WhatsApp Business certification was exactly what I needed.',
-                },
-              },
-            ].map((testimonial, index) => (
-              <div
-                key={index}
-                className="glass rounded-xl p-6 border border-border/50"
-              >
-                <div className="flex items-center gap-1 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-primary text-primary" />
-                  ))}
-                </div>
-                <p className="text-sm text-muted-foreground mb-4 italic">
-                  &quot;{testimonial.text[language]}&quot;
-                </p>
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
-                    <span className="text-sm font-semibold text-primary">{testimonial.name[0]}</span>
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold">{testimonial.name}</p>
-                    <p className="text-xs text-muted-foreground">{testimonial.role[language]}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Testimonials Section */}
+      <TestimonialsCarousel />
 
       {/* AI Assistant CTA */}
       <section className="py-20 relative overflow-hidden">
